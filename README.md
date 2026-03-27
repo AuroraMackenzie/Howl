@@ -4,7 +4,7 @@
   <p>
     <img src="https://img.shields.io/badge/Java-UTF--8%20CLI-blue" alt="Java">
     <img src="https://img.shields.io/badge/Version-1.0.0-green" alt="Version">
-    <img src="https://img.shields.io/badge/状态-可用-success" alt="Status">
+    <img src="https://img.shields.io/badge/Status-Available-success" alt="Status">
     <img src="https://img.shields.io/badge/License-AGPL--3.0-orange" alt="License">
     <img src="https://img.shields.io/badge/Mode-Chinese%20%7C%20English%20%7C%20Espa%C3%B1ol-purple" alt="Mode">
   </p>
@@ -12,83 +12,79 @@
 
 <br>
 
-<img src="Howl.png" align="right" width="36%" alt="Howl" style="margin-left: 20px; margin-bottom: 20px;">
+## 🎉 Introduction
 
-## 🎉 介绍
+**Howl is a text encoder and decoder built on UTF-8 binary mapping.**
 
-**Howl 是一个基于 UTF-8 二进制映射的文本编码器 / 解码器。**
+It is not a simple character replacement tool. It first turns text into a stable byte stream, then maps the data into two readable token systems:
 
-它不是简单的字符替换小工具，而是把自然语言文本先落到稳定字节层，再映射成两套可读编码语汇：
+- Chinese-style tokens: `嗷` / `呜` / `啊` / `~`
+- English-style tokens: `ho` / `wl` / `au` / `~`
 
-- 中文编码语汇：`嗷` / `呜` / `啊` / `~`
-- 英文编码语汇：`ho` / `wl` / `au` / `~`
+Howl does more than basic encode and decode. It also handles sentence-ending marks, sentence order tracking, automatic format detection, and structure recovery after decoding. The goal is not only to hide text, but also to keep the reading structure as stable as possible.
 
-在可逆编码之外，Howl 还做了句末标点识别、句子编号追踪、自动编码格式检测、多语言交互提示和解码顺序恢复。它的重点不是“把字换掉”，而是尽可能稳定地保留文本结构，再把结构藏进一种看起来轻盈、读起来有风格的输出里。
-
-### 🚀 快速导航
+### 🚀 Quick Links
 <p>
-  <a href="#-核心特性">✨ 核心特性</a> &nbsp;|&nbsp;
-  <a href="#-技术核心">🧠 技术核心</a> &nbsp;|&nbsp;
-  <a href="#-快速开始">⚙️ 快速开始</a> &nbsp;|&nbsp;
-  <a href="#-编码映射">🔣 编码映射</a> &nbsp;|&nbsp;
+  <a href="#-core-features">✨ Core Features</a> &nbsp;|&nbsp;
+  <a href="#-technical-core">🧠 Technical Core</a> &nbsp;|&nbsp;
+  <a href="#-quick-start">⚙️ Quick Start</a> &nbsp;|&nbsp;
+  <a href="#-encoding-map">🔣 Encoding Map</a> &nbsp;|&nbsp;
   <a href="#-license">📄 License</a>
 </p>
 
-<br clear="both">
+---
+
+## ✨ Core Features
+
+- **Two encoding styles**: supports both Chinese-style and English-style output, and both can be decoded back.
+- **Automatic input detection**: normal text is encoded, while Howl-style text is detected and decoded.
+- **Sentence-level structure recovery**: the program handles bytes, ending marks, line breaks, and sentence order.
+- **Multi-language CLI**: built-in prompts for Chinese, English, and Spanish.
+- **Length limit and text report**: long input is checked before processing, with a simple analysis report.
+- **Typewriter-like output**: terminal feedback is shown with a timed display effect.
 
 ---
 
-## ✨ 核心特性
+## 🧠 Technical Core
 
-- **双编码语系**：支持中文风格编码和英文风格编码，两套输出都可双向还原。
-- **自动识别输入类型**：输入原文时执行编码，输入 Howl 编码串时自动切换为解码。
-- **句子级结构保留**：不仅处理字节转换，也处理句末标点、换行和句子顺序恢复。
-- **多语言交互界面**：内置中文、English、Español 三套 CLI 提示。
-- **输入长度限制与分析报告**：对超长输入做限制，并输出字符组成统计。
-- **打字机式输出反馈**：控制台输出带节奏感，适合演示与互动使用。
+> This README only shows the main design ideas. It does not expose every implementation detail.
 
----
+- **The reversible mapping works on UTF-8 bytes, not on a simple character table.**
+  Text is turned into binary first, then every 2 bits are mapped to one token. Because of this, Howl can handle Chinese, English, punctuation, and mixed text in one path.
 
-## 🧠 技术核心
+- **Howl keeps text structure, not only text content.**
+  Before encoding, it detects sentence-ending marks and inserts sentence number markers. During decoding, it uses these markers to rebuild the reading order.
 
-> README 只写能力边界与核心方向，不公开全部实现细节。
+- **Ending mark detection is not limited to one symbol.**
+  It supports normal periods, question marks, exclamation marks, ellipsis forms, combined marks, and repeated ending marks in both Chinese and English styles.
 
-- **底层可逆映射不是按字符表，而是按 UTF-8 字节流展开。**
-  文本先转为二进制，再按每 2 bit 一组映射为四元语汇，因此天然兼容中文、英文、标点与混合文本。
+- **Format detection is automatic.**
+  The program checks the token pattern of one line or many lines, then chooses the correct decode path by itself.
 
-- **编码真正保留的是“文本结构”，不只是“文本内容”。**
-  在编码前，Howl 会识别句末终止标点，并插入句子编号标记，解码时再按编号和行序恢复原始阅读顺序。
+- **The recovery path also cleans the output text.**
+  After decoding, Howl removes markers, fixes extra spaces, restores order, and adjusts the first letter when needed, so the result reads more like natural text.
 
-- **句末检测不是单一符号判断，而是复合终止模式识别。**
-  普通句号、问号、感叹号之外，还覆盖中英文省略号、组合标点、多重问号/感叹号等复杂结尾形态。
-
-- **格式检测不是用户手动指定，而是程序自主判别。**
-  Howl 会根据整行或多行输入的 token 分布自动识别中文编码格式或英文编码格式，并切换到正确解码路径。
-
-- **恢复链路做了文本级清洗。**
-  解码后会处理多余空格、首字母规范化、句子顺序重排与标记清除，目标是让结果更接近自然阅读文本，而不是机械吐回原始缓冲串。
-
-这也是 Howl 的核心护城河所在：**它把“可读编码外观”和“文本结构恢复能力”放在同一条链路里做完。**
+This is the main strength of Howl: **it joins readable encoded form and text structure recovery in one full process.**
 
 ---
 
-## ⚙️ 快速开始
+## ⚙️ Quick Start
 
-### 1. 编译
+### 1. Compile
 
 ```bash
 javac Howl.java
 ```
 
-### 2. 运行
+### 2. Run
 
 ```bash
 java Howl
 ```
 
-### 3. 交互使用
+### 3. Use It in the Terminal
 
-程序启动后会先要求选择语言界面：
+When the program starts, it asks you to choose an interface language:
 
 ```text
 1. 中文
@@ -96,30 +92,30 @@ java Howl
 3. Español
 ```
 
-随后你可以直接输入：
+Then you can input:
 
-- 普通文本：程序会自动编码
-- Howl 编码文本：程序会自动识别并解码
+- normal text: the program encodes it
+- Howl-style text: the program detects it and decodes it
 
 > [!NOTE]
-> 数学公式或特殊片段建议按程序提示放在双引号中处理。
+> As the program suggests, math formulas or special parts are better placed inside double quotes.
 
 ---
 
-## 🔣 编码映射
+## 🔣 Encoding Map
 
-### 中文编码模式
+### Chinese Mode
 
-| 二进制 | 映射 |
+| Binary | Token |
 | :--- | :--- |
 | `00` | `嗷` |
 | `01` | `呜` |
 | `10` | `啊` |
 | `11` | `~` |
 
-### 英文编码模式
+### English Mode
 
-| 二进制 | 映射 |
+| Binary | Token |
 | :--- | :--- |
 | `00` | `ho` |
 | `01` | `wl` |
@@ -128,27 +124,27 @@ java Howl
 
 ---
 
-## 🧪 适用场景
+## 🧪 Use Cases
 
-- 风格化文本编码与表达实验
-- 可逆文本混淆与展示
-- 控制台交互式编码工具
-- 句子级文本结构恢复研究
-- 自定义编码语言 / 人造语汇系统原型
+- style-based text encoding experiments
+- reversible text masking and display
+- interactive terminal encoding tools
+- sentence-level structure recovery study
+- custom token language prototypes
 
 ---
 
-## 📌 注意事项
+## 📌 Notes
 
 > [!IMPORTANT]
-> Howl 当前主入口为单文件 Java CLI 程序，建议使用 UTF-8 环境编译与运行。
+> Howl is now a single-file Java CLI program. It is best to compile and run it in a UTF-8 environment.
 
-- 编码超长输入会触发长度限制。
-- 解码依赖格式检测，混入非 Howl token 的内容可能导致无法正确恢复。
-- 项目强调结构保留与风格表达，不以加密安全性为目标。
+- Very long input will hit the length limit.
+- Decoding depends on format detection, so mixed non-Howl tokens may break recovery.
+- The project focuses on structure and style, not on security encryption.
 
 ---
 
 ## 📄 License
 
-本项目采用 [AGPL-3.0](LICENSE) 开源协议。
+This project is released under the [AGPL-3.0](LICENSE) license.
