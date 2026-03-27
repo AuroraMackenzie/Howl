@@ -12,6 +12,8 @@
 
 <br>
 
+<img src="Howl.png" align="right" width="36%" alt="Howl" style="margin-left: 20px; margin-bottom: 20px;">
+
 ## 🎉 Introduction
 
 **Howl is a text encoder and decoder built on UTF-8 binary mapping.**
