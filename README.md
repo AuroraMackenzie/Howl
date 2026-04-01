@@ -144,9 +144,3 @@ Then you can input:
 - Very long input will hit the length limit.
 - Decoding depends on format detection, so mixed non-Howl tokens may break recovery.
 - The project focuses on structure and style, not on security encryption.
-
----
-
-## 📄 License
-
-This project is released under the [AGPL-3.0](LICENSE) license.
