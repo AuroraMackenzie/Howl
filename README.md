@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Howl <sub><small> The Human-Woof Language Traslator</small></sub></h1>
+  <h1>Howl<h1><sub><small>The Human-Woof Language Traslator</small></sub></h1>
 
   <p>
     <img src="https://img.shields.io/badge/Java-UTF--8%20CLI-blue" alt="Java">
