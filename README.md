@@ -16,14 +16,14 @@
 
 ## 🎉 Introduction
 
-**Howl is a text encoder and decoder built on UTF-8 binary mapping.**
+**Howl is a text encoder and decoder.**
 
-It is not a simple character replacement tool. It first turns text into a stable byte stream, then maps the data into two readable token systems:
+Comparing to other simple character replacement tool, it first turns text into a stable byte stream, and then maps the data into two readable token systems:
 
 - Chinese-style tokens: `嗷` / `呜` / `啊` / `~`
 - English-style tokens: `ho` / `wl` / `au` / `~`
 
-Howl does more than basic encode and decode. It also handles sentence-ending marks, sentence order tracking, automatic format detection, and structure recovery after decoding. The goal is not only to hide text, but also to keep the reading structure as stable as possible.
+Howl does more than basic encode and decode. It also handles sentence-ending marks, sentence order tracking, automatic format detection, and structure recovery after decoding. The goal is to keep the reading structure as stable as possible instead of to hide text only.
 
 ### 🚀 Quick Links
 <p>
@@ -49,8 +49,6 @@ Howl does more than basic encode and decode. It also handles sentence-ending mar
 
 ## 🧠 Technical Core
 
-> This README only shows the main design ideas. It does not expose every implementation detail.
-
 - **The reversible mapping works on UTF-8 bytes, not on a simple character table.**
   Text is turned into binary first, then every 2 bits are mapped to one token. Because of this, Howl can handle Chinese, English, punctuation, and mixed text in one path.
 
@@ -66,7 +64,7 @@ Howl does more than basic encode and decode. It also handles sentence-ending mar
 - **The recovery path also cleans the output text.**
   After decoding, Howl removes markers, fixes extra spaces, restores order, and adjusts the first letter when needed, so the result reads more like natural text.
 
-This is the main strength of Howl: **it joins readable encoded form and text structure recovery in one full process.**
+**it joins readable encoded form and text structure recovery in one full process.**
 
 ---
 
@@ -139,7 +137,7 @@ Then you can input:
 ## 📌 Notes
 
 > [!IMPORTANT]
-> Howl is now a single-file Java CLI program. It is best to compile and run it in a UTF-8 environment.
+> Howl is now a single-file Java CLI program, and it is best to compile and run it in a UTF-8 environment.
 
 - Very long input will hit the length limit.
 - Decoding depends on format detection, so mixed non-Howl tokens may break recovery.
